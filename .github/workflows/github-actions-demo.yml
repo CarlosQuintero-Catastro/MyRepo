@@ -3,11 +3,16 @@ run-name: ${{ github.actor }} is learning GitHub actions
 on: [push]
 jobs:
    job1:
-      runs-on: ubuntu-latest
+      runs-on: ${{ matrix.os }}
+      strategy:
+         matrix:
+           os: [windows-latest, ubuntu-latest]
+           version: [18, 20]
+           configuration: [debug, release]
       steps:
          - uses: actions/checkout@v4
          - uses: actions/setup-node@v4
            with:
-              node-version: '20'
-         - run: npm install -g bats
+              node-version: ${{ matrix.version }}
+         - run: npm install -g bats 
          - run: bats --version
